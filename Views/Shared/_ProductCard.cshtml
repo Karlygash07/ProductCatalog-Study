@@ -1,0 +1,30 @@
+@model ProductCatalog.Models.Product
+@{
+    var hasCatalogPhoto = Model.PhotoIndex is >= 1 and <= 12;
+    var photoIndex = (Model.PhotoIndex ?? 1) - 1;
+    var photoX = $"{(photoIndex % 3) * 50}%";
+    var photoY = $"{(photoIndex / 3) * 100d / 3:0.###}%";
+}
+<article class="object-card">
+    <a class="object-photo" asp-controller="Products" asp-action="Details" asp-route-id="@Model.Id" aria-label="@Model.Name толық ақпаратын ашу">
+        @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+        {
+            <img class="uploaded-card-photo" src="@Model.ImageUrl" alt="@Model.Name өнімі" loading="lazy" />
+        }
+        else if (hasCatalogPhoto)
+        {
+            <span class="photo-grid" style="--photo-x:@photoX;--photo-y:@photoY" role="img" aria-label="@Model.Name өнімінің фотосы"></span>
+        }
+        else
+        {
+            <span class="photo-empty" role="img" aria-label="Өнім суреті қосылмаған">СУРЕТ ЖОҚ</span>
+        }
+        <span class="photo-code">№ @Model.Id.ToString("00")</span><span class="photo-arrow">↗</span>
+    </a>
+    <div class="object-card-body">
+        <div class="card-overline"><span>@Model.Category.ToUpperInvariant()</span>@if (Model.IsAvailable) { <span class="availability"><i></i> БАР</span> } else { <span class="availability is-out"><i></i> УАҚЫТША ЖОҚ</span> }</div>
+        <h3><a asp-controller="Products" asp-action="Details" asp-route-id="@Model.Id">@Model.Name</a></h3>
+        <p>@Model.Description</p>
+        <div class="card-bottom"><span class="card-price">@Model.Price.ToString("N0", CultureInfo.GetCultureInfo("kk-KZ")) <small>₸</small></span><a class="card-marker" asp-controller="Products" asp-action="Details" asp-route-id="@Model.Id">ТОЛЫҒЫРАҚ ↗</a></div>
+    </div>
+</article>

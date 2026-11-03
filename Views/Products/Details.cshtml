@@ -1,0 +1,25 @@
+@model Product
+@{
+    var hasCatalogPhoto = Model.PhotoIndex is >= 1 and <= 12;
+    var photoIndex = (Model.PhotoIndex ?? 1) - 1;
+    var photoX = $"{(photoIndex % 3) * 50}%";
+    var photoY = $"{(photoIndex / 3) * 100d / 3:0.###}%";
+}
+<section class="detail-section"><div class="container">
+    <a class="back-link" asp-action="Index">← КАТАЛОГҚА ҚАЙТУ</a>
+    <div class="detail-layout">
+        @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+        {
+            <img class="detail-photo" src="@Model.ImageUrl" alt="@Model.Name фотосы" />
+        }
+        else if (hasCatalogPhoto)
+        {
+            <div class="detail-photo detail-photo-grid" style="--photo-x:@photoX;--photo-y:@photoY" role="img" aria-label="@Model.Name фотосы"></div>
+        }
+        else
+        {
+            <div class="detail-photo detail-photo-empty" role="img" aria-label="Өнім суреті қосылмаған">СУРЕТ ЖОҚ</div>
+        }
+        <div class="detail-info"><p class="kicker">@Model.Category.ToUpperInvariant() / OBJECT @Model.Id.ToString("000")</p><h1>@Model.Name</h1><p class="detail-description">@Model.Description</p><div class="detail-price">@Model.Price.ToString("N0", CultureInfo.GetCultureInfo("kk-KZ")) <small>₸</small></div><div class="detail-availability">@if (Model.IsAvailable) { <span class="availability"><i></i> ҚОЙМАДА БАР</span> } else { <span class="availability is-out"><i></i> УАҚЫТША ЖОҚ</span> }</div><a class="submit-product detail-back" asp-action="Index">Каталогқа қайту <span>↗</span></a></div>
+    </div>
+</div></section>

@@ -1,0 +1,65 @@
+@model IReadOnlyList<Product>
+@{
+    var categories = (string[])ViewBag.CategoryList;
+    var query = (string)ViewBag.SearchTerm;
+    var selectedCategory = (string)ViewBag.SelectedCategory;
+    var selectedSort = (string)ViewBag.SelectedSort;
+    var hasFilters = !string.IsNullOrWhiteSpace(query) || !string.IsNullOrWhiteSpace(selectedCategory) || selectedSort != "featured";
+}
+<section class="intro-section">
+    <div class="container intro-shell">
+        <div class="intro-meta"><span><i></i> OBJECT / ТЕХНОЛОГИЯ ЗАТТАРЫ</span><span>ЖИНАҚ 01 — @DateTime.Now.Year</span></div>
+        <div class="row align-items-center gy-5 intro-grid">
+            <div class="col-lg-6 intro-copy">
+                <p class="kicker">ТАҢДАЛҒАН ӨНІМДЕР • @ViewBag.CollectionSize ЗАТ</p>
+                <h1>Күнделікті зат.<br /><em>Ерекше оймен.</em></h1>
+                <p class="intro-lede">@ViewBag.CatalogIntro Заманауи құрылғыларды асықпай қарап, өзіңізге керегін табыңыз.</p>
+                <a class="intro-link" href="#catalog">ЖИНАҚТЫ КӨРУ <span>↓</span></a>
+                <div class="intro-stat"><b>@ViewBag.AvailableCount</b><span>ҚАЗІР ҚОЛЖЕТІМДІ ӨНІМ</span><i></i><b>@categories.Length</b><span>САНАТ</span></div>
+            </div>
+            <div class="col-lg-6 intro-image-col">
+                <div class="hero-photo" role="img" aria-label="OBJECT каталогындағы күміс Aero ноутбугі"></div>
+                <div class="hero-photo-note"><span>01 / 12</span><span>WORKSPACE EDITION</span><span>↗</span></div>
+                <div class="hero-stamp">GOOD<br />OBJECTS<br /><b>®</b></div>
+            </div>
+        </div>
+        <div class="intro-bottom"><span>ҚЫЗЫҚҚАН ЗАТТАРДЫ ТАБЫҢЫЗ</span><span class="intro-rule"></span><span>01 — 12</span></div>
+    </div>
+</section>
+
+<section class="catalog-section" id="catalog">
+    <div class="container">
+        <div class="catalog-title-row">
+            <div><p class="kicker">THE OBJECT INDEX / 001</p><h2>Өнімдер жинағы<span>↘</span></h2><p class="catalog-subtitle">@ViewBag.CatalogIntro</p></div>
+            <div class="catalog-count"><strong>@Model.Count.ToString("00")</strong><span>КӨРСЕТІЛГЕН<br />ӨНІМ</span></div>
+        </div>
+        @if (ViewBag.Notice is string notice)
+        {
+            <div class="catalog-notice" role="status">@notice</div>
+        }
+
+        <form asp-controller="Products" asp-action="Index" method="get" class="catalog-filter" aria-label="Өнімдерді іздеу және сүзу">
+            <label class="filter-search"><span>ІЗДЕУ</span><input type="search" name="q" value="@query" placeholder="Атауы немесе санаты..." /></label>
+            <label class="filter-select"><span>САНАТ</span><select name="category" data-auto-filter><option value="">Барлығы</option>@foreach (var item in categories) { <option value="@item" selected="@(item == selectedCategory)">@item</option> }</select></label>
+            <label class="filter-select sort-select"><span>РЕТІ</span><select name="sort" data-auto-filter><option value="featured" selected="@(selectedSort == "featured")">Бастапқы</option><option value="price-asc" selected="@(selectedSort == "price-asc")">Арзаны алдымен</option><option value="price-desc" selected="@(selectedSort == "price-desc")">Қымбаты алдымен</option><option value="name" selected="@(selectedSort == "name")">Атауы бойынша</option></select></label>
+            <button class="filter-submit" type="submit">ҚОЛДАНУ <span>↗</span></button>
+        </form>
+
+        <div class="category-chips"><span>ЖЫЛДАМ ТАҢДАУ</span><a class="@(string.IsNullOrEmpty(selectedCategory) ? "is-active" : "")" href="@Url.Action("Index", new { q = query, sort = selectedSort })">Барлығы <small>@ViewBag.CollectionSize</small></a>@foreach (var item in categories) { <a class="@(item == selectedCategory ? "is-active" : "")" href="@Url.Action("Index", new { q = query, category = item, sort = selectedSort })">@item</a> }@if (hasFilters) { <a class="clear-link" href="@Url.Action("Index", new { })">Сүзгіні тазалау ×</a> }</div>
+
+        @if (Model.Count > 0)
+        {
+            <div class="row g-4 product-row">
+                @foreach (var product in Model)
+                {
+                    <div class="col-12 col-sm-6 col-xl-4"><partial name="_ProductCard" model="product" /></div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-panel"><span class="empty-mark">O</span><p class="kicker">НӘТИЖЕ ЖОҚ</p><h3>Басқа атаумен іздеп көріңіз.</h3><a href="@Url.Action("Index", new { })">Барлық өнімді көрсету →</a></div>
+        }
+        <div class="catalog-disclaimer"><span>*</span> Оқу мақсатындағы демонстрациялық өнімдер. Нақты сатылымға арналмаған.</div>
+    </div>
+</section>

@@ -1,0 +1,15 @@
+bin/
+obj/
+artifacts/
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+appsettings.Local.json
+appsettings.*.Local.json
+.env
+.env.*
+secrets.json
+Thumbs.db
+.DS_Store

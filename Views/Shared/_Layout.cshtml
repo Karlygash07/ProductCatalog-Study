@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f1e9" />
+    <title>@ViewData["Title"] · OBJECT / 12</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="masthead">
+        <nav class="navbar navbar-expand-lg object-nav">
+            <div class="container nav-inner">
+                <a class="navbar-brand object-brand" asp-controller="Products" asp-action="Index" aria-label="OBJECT каталогына өту"><span class="object-symbol">O</span>OBJECT<span class="brand-caption">/ 12</span></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav" aria-controls="siteNav" aria-expanded="false" aria-label="Мәзір"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="siteNav">
+                    <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-4">
+                        <li class="nav-item"><a class="nav-link" asp-controller="Products" asp-action="Index">Жинақ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#catalog">Каталог</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#about">Жоба жайлы</a></li>
+                        <li class="nav-item"><a class="nav-contact" asp-controller="Products" asp-action="Create">ӨНІМ ҚОСУ <span>＋</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main id="main-content">@RenderBody()</main>
+    <footer class="page-footer" id="about">
+        <div class="container footer-layout">
+            <div><a class="object-brand footer-logo" asp-controller="Products" asp-action="Index"><span class="object-symbol">O</span>OBJECT<span class="brand-caption">/ 12</span></a><p>Күнделікті технология.<br />Мұқият таңдалған заттар.</p></div>
+            <div class="footer-section"><span>НАВИГАЦИЯ</span><a href="/#catalog">Каталог</a><a href="/#about">Біз туралы</a></div>
+            <div class="footer-section"><span>ОҚУ ЖОБАСЫ</span><p>ASP.NET Core MVC<br />Razor · Bootstrap 5</p></div>
+            <div class="footer-year">OBJECT / 12<br />© @DateTime.Now.Year</div>
+        </div>
+    </footer>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
